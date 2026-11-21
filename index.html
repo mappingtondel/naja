@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="utf-8">
+<meta name="viewport" id="vp" content="width=device-width,initial-scale=1,user-scalable=no">
+<script>
+// Im Browser (Safari) ohne viewport-fit=cover: sonst liegt die graue Safari-Leiste über der Oberfläche.
+// Als installierte App (Home-Bildschirm) füllt die Karte den ganzen Bildschirm.
+if (navigator.standalone || (window.matchMedia && matchMedia('(display-mode: standalone)').matches)) {
+  document.getElementById('vp').setAttribute('content', 'width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no');
+}
+</script>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GameMap">
+<meta name="theme-color" content="#14181c">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title>GameMap</title>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<link rel="stylesheet" href="css/style.css">
+</head><body>
+<div id="map"></div>
+<div id="busy"></div>
+<div id="loader"><div class="ldr-title">GAMEMAP</div><div class="ldr-bar"><i></i></div><div class="ldr-sub">Karte wird geladen …</div></div>
+<div id="netStatus">Offline-Modus – Keine Internetverbindung</div>
+<div id="side">
+  <button class="fab panel" id="styleBtn" aria-label="Kartenstil"></button>
+  <button class="fab panel" id="locBtn" aria-label="Mein Standort"></button>
+  <button class="fab panel hidden" id="compassBtn" aria-label="Nordausrichtung"></button>
+  <button class="fab panel" id="ovBtn" aria-label="Routenübersicht"></button>
+  <button class="fab panel" id="voiceBtn" aria-label="Ansagen und Töne"></button>
+</div>
+<div id="limit" hidden><b id="limitVal"></b></div>
+<div id="banner">
+  <div class="b1"><div class="tico" id="bIco"></div><div><div id="bDist"></div><div id="bText"></div></div></div>
+  <div id="b2" hidden><div class="tico" id="b2Ico"></div><div id="b2Text"></div></div>
+  <i class="grab"></i>
+</div>
+<div id="navbar">
+  <div class="stats">
+    <div><b id="eta">–</b><span>Ankunft</span></div>
+    <div><b id="remT">–</b><span id="remTL">Min.</span></div>
+    <div><b id="remD">–</b><span>km</span></div>
+    <div id="speedTile"><b id="speedVal">0</b><span>km/h</span></div>
+  </div>
+  <div id="simTag" hidden>SIMULATION · Tempo ändern: auf km/h tippen</div>
+  <div class="nbtns"><button id="shareBtn">Teilen</button><button id="stopBtn">Beenden</button></div>
+</div>
+<div id="sheet" class="panel" data-view="home" data-stop="peek">
+  <div id="grabber" aria-label="Menü ziehen"><i></i></div>
+  <div id="sheetHead">
+    <!-- Start & Suche -->
+    <div class="hd" id="hdSearch">
+      <div id="qRow">
+        <span class="qi" id="qIcon"></span>
+        <input id="q" type="search" placeholder="Suche nach Orten" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="search">
+        <button id="qClear" aria-label="Eingabe löschen" hidden></button>
+      </div>
+      <button id="qClose" class="hbtn" aria-label="Suche schließen" hidden></button>
+    </div>
+    <!-- Ort -->
+    <div class="hd" id="hdPlace">
+      <div class="ttl"><h3 id="cTitle"></h3><p id="cSub"></p></div>
+      <button id="placeClose" class="hbtn" aria-label="Schließen"></button>
+    </div>
+    <!-- Route -->
+    <div class="hd" id="hdRoute">
+      <button id="routeShare" class="hbtn" aria-label="Ziel teilen"></button>
+      <div class="mid"><b>Route</b><button id="optBtn" class="pill">Optionen</button></div>
+      <button id="routeClose" class="hbtn" aria-label="Zurück"></button>
+    </div>
+    <!-- Optionen -->
+    <div class="hd" id="hdOpts">
+      <button id="optCancel" class="hbtn" aria-label="Verwerfen"></button>
+      <div class="mid"><b>Optionen</b></div>
+      <button id="optOk" class="hbtn ok" aria-label="Übernehmen"></button>
+    </div>
+  </div>
+  <div id="sheetBody">
+    <section id="vHome"><div id="homePlaces"></div><div id="homeRecent"></div></section>
+    <section id="vSearch"><div id="results"></div></section>
+    <section id="vPlace"><div id="placeActions"></div><div id="placeSave"></div><div id="placeInfo"></div></section>
+    <section id="vRoute"><div id="wpCard"></div><div id="routeList"></div><div id="alongBox"></div><div id="routeMore"></div></section>
+    <section id="vOpts"><div id="optBody"></div></section>
+  </div>
+</div>
+<div id="toast"></div>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script type="module" src="js/map.js"></script>
+</body></html>
